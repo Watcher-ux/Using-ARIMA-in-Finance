@@ -1,47 +1,62 @@
-# ARIMA-Based Financial Time Series Modeling
+# ARIMA–GARCH Based Financial Time Series Modeling
 
-This project explores **ARIMA (AutoRegressive Integrated Moving Average)** models applied to
+This project explores **ARIMA (AutoRegressive Integrated Moving Average)** and  
+**GARCH (Generalized AutoRegressive Conditional Heteroskedasticity)** models applied to
 financial time series data from multiple publicly traded companies.
 
-The focus is on understanding price dynamics, stationarity, and short-horizon forecasting
-using historical market data.
+The focus is on separating **mean dynamics** from **volatility dynamics**, understanding
+stationarity, and producing **short-horizon forecasts for returns** alongside
+**medium-horizon forecasts for risk**.
 
 ---
 
 ## 📈 Project Overview
 
-Financial price series are typically non-stationary.  
-This repository demonstrates how ARIMA can be used to:
+Financial price series are inherently non-stationary, while **returns are typically stationary
+but heteroskedastic**.
 
-- Transform raw price data into stationary series
-- Model temporal dependencies in financial returns
-- Compare models using information criteria (AIC)
-- Generate short-term forecasts
+The repository files demonstrate how to:
 
-The analysis is performed on historical stock data from different companies to observe how
-ARIMA behaves across varying market conditions.
+- Transform raw price data into stationary return series
+- Model **short-term mean behavior** using ARIMA
+- Model **volatility clustering and risk persistence** using GARCH
+- Compare competing models using information criteria (AIC)
+- Generate interpretable forecasts for both **returns** and **uncertainty**
+
+The analysis is performed on historical stock data from multiple companies to observe how
+mean and volatility dynamics differ across assets and market regimes.
 
 ---
 
 ## 🔍 Methodology
 
-1. **Data Collection**
-   - Historical price data (Close prices)
-   - Multiple companies for comparison
+### 1. Data Collection
+- Historical adjusted close prices
+- Multiple publicly traded companies for comparison
 
-2. **Preprocessing**
-   - Log transformation
-   - Differencing to achieve stationarity
-   - Visual and statistical checks
+### 2. Preprocessing
+- Log transformation of prices
+- Log-differencing to obtain returns
+- Aggregation to weekly frequency
+- Stationarity checks (ADF test)
+- Visual inspection of returns and volatility
 
-3. **Modeling**
-   - ARIMA model selection
-   - Parameter tuning via AIC
-   - Diagnostic checks on residuals
+### 3. Mean Modeling (ARIMA)
+- Identification using ACF / PACF
+- ARIMA model selection via AIC
+- Low-order models favored to avoid overfitting
+- Residual diagnostics to confirm weak mean dependence
 
-4. **Forecasting**
-   - Short-term return forecasts
-   - Interpretation of mean-reverting behavior
+### 4. Volatility Modeling (GARCH)
+- GARCH modeling on ARIMA residuals or directly on returns
+- Capture of volatility clustering and persistence
+- Model comparison using AIC
+- Forecasting conditional variance (volatility), not direction
+
+### 5. Forecasting
+- **ARIMA**: short-horizon (1–2 weeks) mean forecasts
+- **GARCH**: medium-horizon (≈4 weeks) volatility forecasts
+- Visualization using volatility cones (±2σ)
 
 ---
 
@@ -52,14 +67,18 @@ ARIMA behaves across varying market conditions.
 - Pandas
 - Matplotlib
 - Statsmodels
+- arch (for GARCH modeling)
 
 ---
 
-## 📌 Notes
+## 📌 Key Takeaways
 
-- ARIMA models the **conditional mean**, not volatility.
-- Flat forecasts are expected for stationary return series.
-- Model performance is evaluated comparatively, not absolutely.
+- ARIMA models the **conditional mean** of returns
+- GARCH models the **conditional variance** (volatility)
+- Financial returns exhibit weak mean predictability
+- Volatility displays strong persistence and clustering
+- Forecasting risk is often more reliable than forecasting direction
+- Model performance is evaluated **comparatively**, not absolutely
 
 ---
 
